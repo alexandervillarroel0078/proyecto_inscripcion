@@ -11,7 +11,7 @@ class Materia(Base):
     creditos = Column(Integer, nullable=False)
     horas_sem = Column(Integer, nullable=False)
 
-    # 🔑 Claves foráneas
+    #  Claves foráneas
     nivel_id = Column(Integer, ForeignKey("nivel.id"), nullable=False)
     plan_id = Column(Integer, ForeignKey("plan_estudio.id"), nullable=False)
 
@@ -19,7 +19,7 @@ class Materia(Base):
     nivel = relationship("Nivel", back_populates="materias")
     plan = relationship("PlanEstudio", back_populates="materias")
 
-    # 🔗 Relaciones de prerequisitos
+    #  Relaciones de prerequisitos
     prerrequisitos = relationship(    "Prerequisito",    foreign_keys="[Prerequisito.materia_id]",    back_populates="materia",
     overlaps="requisitos"
    )

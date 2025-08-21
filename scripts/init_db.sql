@@ -36,13 +36,13 @@ CREATE TABLE IF NOT EXISTS prerequisito (
     id SERIAL PRIMARY KEY,
     materia_id INT NOT NULL,
     prerequisito_id INT NOT NULL,
-    tipo VARCHAR(20) DEFAULT 'OBLIGATORIO', -- opcional, puedes poner ELECTIVO u OBLIGATORIO
+    tipo VARCHAR(20) DEFAULT 'OBLIGATORIO', 
     nota_min INT DEFAULT 51,
     CONSTRAINT fk_materia FOREIGN KEY (materia_id) REFERENCES materia(id),
     CONSTRAINT fk_prerequisito FOREIGN KEY (prerequisito_id) REFERENCES materia(id)
 );
 
--- Insertar datos de ejemplo
+ 
 INSERT INTO nivel (numero, nombre) VALUES 
 (1, 'Primer Semestre'),
 (2, 'Segundo Semestre'),
@@ -69,22 +69,18 @@ VALUES
 ('INF220', 'Estructuras de Datos I', 5, 5, 3, 1),
 ('INF310', 'Estructuras de Datos II', 5, 5, 4, 1);
 
--- =====================
--- PRERREQUISITOS
--- =====================
--- Programación II requiere Programación I
+ 
 INSERT INTO prerequisito (materia_id, prerequisito_id, tipo, nota_min)
 VALUES ((SELECT id FROM materia WHERE codigo='INF210'),
         (SELECT id FROM materia WHERE codigo='INF120'),
         'OBLIGATORIO', 51);
 
--- Estructura de Datos II requiere Estructura de Datos I
+ 
 INSERT INTO prerequisito (materia_id, prerequisito_id, tipo, nota_min)
 VALUES ((SELECT id FROM materia WHERE codigo='INF310'),
         (SELECT id FROM materia WHERE codigo='INF220'),
         'OBLIGATORIO', 51);
-
--- Calculo II requiere Calculo I
+ 
 INSERT INTO prerequisito (materia_id, prerequisito_id, tipo, nota_min)
 VALUES ((SELECT id FROM materia WHERE codigo='MAT102'),
         (SELECT id FROM materia WHERE codigo='MAT101'),
