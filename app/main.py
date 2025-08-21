@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from app.routers import carrera, plan_estudio,nivel, materia, prerequisito  
+from app.database import Base, engine
+from app import models
 
+Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 app.include_router(carrera.router, prefix="/carreras", tags=["Carreras"])
