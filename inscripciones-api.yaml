@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inscripciones-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inscripciones-api
+  template:
+    metadata:
+      labels:
+        app: inscripciones-api
+    spec:
+      containers:
+        - name: api
+          image: tuusuario/inscripciones_api:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: postgres://user:password@universidad-db:5432/inscripciones
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inscripciones-api-service
+spec:
+  selector:
+    app: inscripciones-api
+  ports:
+    - port: 80
+      targetPort: 8000
+  type: NodePort

@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:  # Aquí definimos los contenedores
+
+  # =========================
+  # CONTENEDOR DE BASE DE DATOS
+  # =========================
+  db:
+    image: postgres:16
+    container_name: universidad_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: inscripciones
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      # Esto ejecuta automáticamente el script al iniciar
+
+  # =========================
+  # CONTENEDOR DE LA API
+  # =========================
+  api:
+    build: .
+    container_name: inscripciones_api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db   # La API arranca después que la BD esté arriba
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/inscripciones
+    volumes:
+      - ./app:/code/app   # 👈 monta tu carpeta local "app" en el contenedor
+      # Conexión a la base de datos:
+      # user = user
+      # password = password
+      # host = db (nombre del servicio, no "localhost")
+      # puerto = 5432
+      # database = inscripciones
